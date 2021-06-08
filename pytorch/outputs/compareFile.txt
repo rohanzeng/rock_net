@@ -1,0 +1,150 @@
+rect.L.1428529672.877937.png
+Number of rock pixels: (Sam, Rohan) = (0, 832)
+Number of rock clusters: (Sam, Rohan) = (0, 5)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 442, 'i_min': 0, 'score': 0, 'j_max': 505, 'i_max': 5}, {'j_min': 370, 'i_min': 0, 'score': 0, 'j_max': 417, 'i_max': 5}, {'j_min': 332, 'i_min': 0, 'score': 0, 'j_max': 344, 'i_max': 4}, {'j_min': 222, 'i_min': 0, 'score': 0, 'j_max': 241, 'i_max': 5}, {'j_min': 179, 'i_min': 0, 'score': 0, 'j_max': 220, 'i_max': 5}]
+rect.L.1428428460.791787.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []
+rect.L.1428510794.486041.png
+Number of rock pixels: (Sam, Rohan) = (0, 190)
+Number of rock clusters: (Sam, Rohan) = (0, 2)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 491, 'i_min': 99, 'score': 0, 'j_max': 503, 'i_max': 102}, {'j_min': 471, 'i_min': 0, 'score': 0, 'j_max': 498, 'i_max': 7}]
+rect.L.1428511184.970045.png
+Number of rock pixels: (Sam, Rohan) = (0, 1698)
+Number of rock clusters: (Sam, Rohan) = (0, 2)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 23, 'i_min': 0, 'score': 0, 'j_max': 114, 'i_max': 31}, {'j_min': 11, 'i_min': 0, 'score': 0, 'j_max': 23, 'i_max': 6}]
+rect.L.1428511641.944478.png
+Number of rock pixels: (Sam, Rohan) = (0, 2452)
+Number of rock clusters: (Sam, Rohan) = (0, 3)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 340, 'i_min': 0, 'score': 0, 'j_max': 406, 'i_max': 6}, {'j_min': 218, 'i_min': 0, 'score': 0, 'j_max': 294, 'i_max': 5}, {'j_min': 0, 'i_min': 0, 'score': 0, 'j_max': 106, 'i_max': 38}]
+rect.L.1428607706.284438.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []
+rect.L.1428348540.175553.png
+Number of rock pixels: (Sam, Rohan) = (0, 1523)
+Number of rock clusters: (Sam, Rohan) = (0, 7)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 0, 'i_min': 238, 'score': 0, 'j_max': 5, 'i_max': 240}, {'j_min': 493, 'i_min': 0, 'score': 0, 'j_max': 495, 'i_max': 4}, {'j_min': 320, 'i_min': 0, 'score': 0, 'j_max': 359, 'i_max': 6}, {'j_min': 291, 'i_min': 0, 'score': 0, 'j_max': 294, 'i_max': 4}, {'j_min': 153, 'i_min': 0, 'score': 0, 'j_max': 253, 'i_max': 10}, {'j_min': 76, 'i_min': 0, 'score': 0, 'j_max': 131, 'i_max': 8}, {'j_min': 7, 'i_min': 0, 'score': 0, 'j_max': 64, 'i_max': 7}]
+rect.L.1428269359.967726.png
+Number of rock pixels: (Sam, Rohan) = (0, 188)
+Number of rock clusters: (Sam, Rohan) = (0, 1)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 221, 'i_min': 0, 'score': 0, 'j_max': 259, 'i_max': 6}]
+rect.L.1428510720.921627.png
+Number of rock pixels: (Sam, Rohan) = (0, 3609)
+Number of rock clusters: (Sam, Rohan) = (0, 15)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 452, 'i_min': 252, 'score': 0, 'j_max': 471, 'i_max': 280}, {'j_min': 221, 'i_min': 230, 'score': 0, 'j_max': 223, 'i_max': 231}, {'j_min': 75, 'i_min': 190, 'score': 0, 'j_max': 77, 'i_max': 191}, {'j_min': 163, 'i_min': 95, 'score': 0, 'j_max': 194, 'i_max': 112}, {'j_min': 333, 'i_min': 84, 'score': 0, 'j_max': 343, 'i_max': 93}, {'j_min': 114, 'i_min': 24, 'score': 0, 'j_max': 126, 'i_max': 31}, {'j_min': 339, 'i_min': 17, 'score': 0, 'j_max': 354, 'i_max': 31}, {'j_min': 128, 'i_min': 10, 'score': 0, 'j_max': 141, 'i_max': 21}, {'j_min': 421, 'i_min': 0, 'score': 0, 'j_max': 510, 'i_max': 28}, {'j_min': 381, 'i_min': 0, 'score': 0, 'j_max': 416, 'i_max': 6}, {'j_min': 245, 'i_min': 0, 'score': 0, 'j_max': 303, 'i_max': 7}, {'j_min': 199, 'i_min': 0, 'score': 0, 'j_max': 219, 'i_max': 6}, {'j_min': 170, 'i_min': 0, 'score': 0, 'j_max': 195, 'i_max': 6}, {'j_min': 90, 'i_min': 0, 'score': 0, 'j_max': 94, 'i_max': 4}, {'j_min': 0, 'i_min': 0, 'score': 0, 'j_max': 66, 'i_max': 9}]
+rect.L.1428528989.532893.png
+Number of rock pixels: (Sam, Rohan) = (0, 501)
+Number of rock clusters: (Sam, Rohan) = (0, 4)
+Bbox coords:
+Sam: []
+Rohan: [{'j_min': 429, 'i_min': 0, 'score': 0, 'j_max': 460, 'i_max': 5}, {'j_min': 369, 'i_min': 0, 'score': 0, 'j_max': 396, 'i_max': 6}, {'j_min': 332, 'i_min': 0, 'score': 0, 'j_max': 352, 'i_max': 5}, {'j_min': 219, 'i_min': 0, 'score': 0, 'j_max': 249, 'i_max': 6}]
+rect.L.1428426629.729901.png
+Number of rock pixels: (Sam, Rohan) = (0, 353)
+Number of rock clusters: (Sam, Rohan) = (0, 3)
+Bbox coords:
+Sam: []
+Rohan: [{'score': 0, 'j_min': 421, 'j_max': 439, 'i_max': 234, 'i_min': 225}, {'score': 0, 'j_min': 437, 'j_max': 441, 'i_max': 110, 'i_min': 109}, {'score': 0, 'j_min': 217, 'j_max': 249, 'i_max': 9, 'i_min': 0}]
+rect.L.1428511785.337260.png
+Number of rock pixels: (Sam, Rohan) = (0, 1891)
+Number of rock clusters: (Sam, Rohan) = (0, 8)
+Bbox coords:
+Sam: []
+Rohan: [{'score': 0, 'i_max': 5, 'j_min': 474, 'j_max': 501, 'i_min': 0}, {'score': 0, 'i_max': 5, 'j_min': 450, 'j_max': 463, 'i_min': 0}, {'score': 0, 'i_max': 7, 'j_min': 374, 'j_max': 422, 'i_min': 0}, {'score': 0, 'i_max': 5, 'j_min': 355, 'j_max': 372, 'i_min': 0}, {'score': 0, 'i_max': 6, 'j_min': 286, 'j_max': 327, 'i_min': 0}, {'score': 0, 'i_max': 7, 'j_min': 212, 'j_max': 282, 'i_min': 0}, {'score': 0, 'i_max': 8, 'j_min': 21, 'j_max': 135, 'i_min': 0}, {'score': 0, 'i_max': 6, 'j_min': 9, 'j_max': 20, 'i_min': 0}]
+rect.L.1428428363.392751.png
+Number of rock pixels: (Sam, Rohan) = (63, 8)
+Number of rock clusters: (Sam, Rohan) = (2, 1)
+Bbox coords:
+Sam: [{'score': 0, 'j_max': 482, 'i_min': 52, 'i_max': 58, 'j_min': 473}, {'score': 0, 'j_max': 167, 'i_min': 43, 'i_max': 50, 'j_min': 160}]
+Rohan: [{'score': 0, 'j_max': 502, 'i_min': 0, 'i_max': 4, 'j_min': 500}]
+rect.L.1428508597.888726.png
+Number of rock pixels: (Sam, Rohan) = (555, 4)
+Number of rock clusters: (Sam, Rohan) = (3, 1)
+Bbox coords:
+Sam: [{'score': 0, 'j_max': 396, 'i_min': 269, 'i_max': 290, 'j_min': 370}, {'score': 0, 'j_max': 400, 'i_min': 262, 'i_max': 277, 'j_min': 388}, {'score': 0, 'j_max': 76, 'i_min': 185, 'i_max': 203, 'j_min': 60}]
+Rohan: [{'score': 0, 'j_max': 350, 'i_min': 0, 'i_max': 4, 'j_min': 349}]
+rect.L.1428250970.160310.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []
+rect.L.1428348583.490361.png
+Number of rock pixels: (Sam, Rohan) = (6138, 1924)
+Number of rock clusters: (Sam, Rohan) = (12, 14)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 185, 'j_min': 196, 'j_max': 261, 'i_max': 234}, {'score': 0, 'i_min': 136, 'j_min': 218, 'j_max': 252, 'i_max': 171}, {'score': 0, 'i_min': 135, 'j_min': 81, 'j_max': 135, 'i_max': 176}, {'score': 0, 'i_min': 131, 'j_min': 0, 'j_max': 12, 'i_max': 153}, {'score': 0, 'i_min': 117, 'j_min': 265, 'j_max': 301, 'i_max': 156}, {'score': 0, 'i_min': 81, 'j_min': 352, 'j_max': 419, 'i_max': 114}, {'score': 0, 'i_min': 70, 'j_min': 50, 'j_max': 76, 'i_max': 87}, {'score': 0, 'i_min': 50, 'j_min': 355, 'j_max': 366, 'i_max': 60}, {'score': 0, 'i_min': 48, 'j_min': 100, 'j_max': 119, 'i_max': 64}, {'score': 0, 'i_min': 27, 'j_min': 150, 'j_max': 164, 'i_max': 38}, {'score': 0, 'i_min': 12, 'j_min': 243, 'j_max': 264, 'i_max': 31}, {'score': 0, 'i_min': 0, 'j_min': 0, 'j_max': 45, 'i_max': 7}]
+Rohan: [{'score': 0, 'i_min': 286, 'j_min': 388, 'j_max': 423, 'i_max': 304}, {'score': 0, 'i_min': 263, 'j_min': 364, 'j_max': 366, 'i_max': 264}, {'score': 0, 'i_min': 198, 'j_min': 108, 'j_max': 109, 'i_max': 199}, {'score': 0, 'i_min': 188, 'j_min': 195, 'j_max': 223, 'i_max': 208}, {'score': 0, 'i_min': 149, 'j_min': 91, 'j_max': 93, 'i_max': 152}, {'score': 0, 'i_min': 141, 'j_min': 277, 'j_max': 286, 'i_max': 145}, {'score': 0, 'i_min': 88, 'j_min': 356, 'j_max': 397, 'i_max': 103}, {'score': 0, 'i_min': 10, 'j_min': 91, 'j_max': 96, 'i_max': 20}, {'score': 0, 'i_min': 0, 'j_min': 441, 'j_max': 450, 'i_max': 4}, {'score': 0, 'i_min': 0, 'j_min': 399, 'j_max': 422, 'i_max': 5}, {'score': 0, 'i_min': 0, 'j_min': 371, 'j_max': 385, 'i_max': 4}, {'score': 0, 'i_min': 0, 'j_min': 268, 'j_max': 309, 'i_max': 6}, {'score': 0, 'i_min': 0, 'j_min': 193, 'j_max': 201, 'i_max': 4}, {'score': 0, 'i_min': 0, 'j_min': 134, 'j_max': 162, 'i_max': 5}]
+rect.L.1428249317.824363.png
+Number of rock pixels: (Sam, Rohan) = (319, 183)
+Number of rock clusters: (Sam, Rohan) = (2, 1)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 43, 'j_min': 54, 'j_max': 72, 'i_max': 54}, {'score': 0, 'i_min': 5, 'j_min': 68, 'j_max': 87, 'i_max': 18}]
+Rohan: [{'score': 0, 'i_min': 0, 'j_min': 11, 'j_max': 50, 'i_max': 5}]
+rect.L.1428348443.690421.png
+Number of rock pixels: (Sam, Rohan) = (5910, 1976)
+Number of rock clusters: (Sam, Rohan) = (12, 8)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 101, 'j_min': 490, 'j_max': 500, 'i_max': 107}, {'score': 0, 'i_min': 63, 'j_min': 223, 'j_max': 253, 'i_max': 88}, {'score': 0, 'i_min': 63, 'j_min': 174, 'j_max': 218, 'i_max': 100}, {'score': 0, 'i_min': 50, 'j_min': 86, 'j_max': 172, 'i_max': 103}, {'score': 0, 'i_min': 47, 'j_min': 409, 'j_max': 467, 'i_max': 82}, {'score': 0, 'i_min': 38, 'j_min': 237, 'j_max': 250, 'i_max': 47}, {'score': 0, 'i_min': 21, 'j_min': 452, 'j_max': 492, 'i_max': 41}, {'score': 0, 'i_min': 17, 'j_min': 13, 'j_max': 31, 'i_max': 31}, {'score': 0, 'i_min': 14, 'j_min': 344, 'j_max': 385, 'i_max': 34}, {'score': 0, 'i_min': 6, 'j_min': 257, 'j_max': 271, 'i_max': 27}, {'score': 0, 'i_min': 0, 'j_min': 491, 'j_max': 509, 'i_max': 8}, {'score': 0, 'i_min': 0, 'j_min': 333, 'j_max': 363, 'i_max': 10}]
+Rohan: [{'score': 0, 'i_min': 221, 'j_min': 168, 'j_max': 176, 'i_max': 225}, {'score': 0, 'i_min': 18, 'j_min': 475, 'j_max': 482, 'i_max': 22}, {'score': 0, 'i_min': 0, 'j_min': 491, 'j_max': 507, 'i_max': 6}, {'score': 0, 'i_min': 0, 'j_min': 327, 'j_max': 439, 'i_max': 12}, {'score': 0, 'i_min': 0, 'j_min': 280, 'j_max': 299, 'i_max': 5}, {'score': 0, 'i_min': 0, 'j_min': 186, 'j_max': 274, 'i_max': 8}, {'score': 0, 'i_min': 0, 'j_min': 107, 'j_max': 151, 'i_max': 7}, {'score': 0, 'i_min': 0, 'j_min': 30, 'j_max': 94, 'i_max': 6}]
+rect.L.1428607830.721687.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []
+rect.L.1428607902.770852.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []
+rect.L.1428269071.095257.png
+Number of rock pixels: (Sam, Rohan) = (8565, 6935)
+Number of rock clusters: (Sam, Rohan) = (16, 26)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 210, 'j_min': 406, 'j_max': 422, 'i_max': 226}, {'score': 0, 'i_min': 190, 'j_min': 275, 'j_max': 332, 'i_max': 257}, {'score': 0, 'i_min': 146, 'j_min': 150, 'j_max': 179, 'i_max': 183}, {'score': 0, 'i_min': 133, 'j_min': 402, 'j_max': 434, 'i_max': 164}, {'score': 0, 'i_min': 131, 'j_min': 239, 'j_max': 302, 'i_max': 192}, {'score': 0, 'i_min': 130, 'j_min': 89, 'j_max': 120, 'i_max': 158}, {'score': 0, 'i_min': 108, 'j_min': 346, 'j_max': 356, 'i_max': 116}, {'score': 0, 'i_min': 92, 'j_min': 367, 'j_max': 377, 'i_max': 100}, {'score': 0, 'i_min': 88, 'j_min': 430, 'j_max': 448, 'i_max': 101}, {'score': 0, 'i_min': 87, 'j_min': 8, 'j_max': 54, 'i_max': 114}, {'score': 0, 'i_min': 67, 'j_min': 277, 'j_max': 292, 'i_max': 85}, {'score': 0, 'i_min': 46, 'j_min': 435, 'j_max': 449, 'i_max': 64}, {'score': 0, 'i_min': 36, 'j_min': 382, 'j_max': 394, 'i_max': 61}, {'score': 0, 'i_min': 12, 'j_min': 20, 'j_max': 28, 'i_max': 19}, {'score': 0, 'i_min': 0, 'j_min': 444, 'j_max': 514, 'i_max': 17}, {'score': 0, 'i_min': 0, 'j_min': 144, 'j_max': 153, 'i_max': 7}]
+Rohan: [{'score': 0, 'i_min': 226, 'j_min': 277, 'j_max': 289, 'i_max': 247}, {'score': 0, 'i_min': 213, 'j_min': 19, 'j_max': 22, 'i_max': 215}, {'score': 0, 'i_min': 205, 'j_min': 26, 'j_max': 30, 'i_max': 208}, {'score': 0, 'i_min': 204, 'j_min': 290, 'j_max': 297, 'i_max': 209}, {'score': 0, 'i_min': 188, 'j_min': 34, 'j_max': 46, 'i_max': 201}, {'score': 0, 'i_min': 181, 'j_min': 300, 'j_max': 328, 'i_max': 209}, {'score': 0, 'i_min': 176, 'j_min': 340, 'j_max': 382, 'i_max': 205}, {'score': 0, 'i_min': 165, 'j_min': 245, 'j_max': 248, 'i_max': 169}, {'score': 0, 'i_min': 150, 'j_min': 155, 'j_max': 173, 'i_max': 171}, {'score': 0, 'i_min': 149, 'j_min': 389, 'j_max': 390, 'i_max': 150}, {'score': 0, 'i_min': 141, 'j_min': 199, 'j_max': 221, 'i_max': 157}, {'score': 0, 'i_min': 135, 'j_min': 402, 'j_max': 427, 'i_max': 158}, {'score': 0, 'i_min': 133, 'j_min': 264, 'j_max': 292, 'i_max': 175}, {'score': 0, 'i_min': 133, 'j_min': 249, 'j_max': 258, 'i_max': 135}, {'score': 0, 'i_min': 133, 'j_min': 98, 'j_max': 111, 'i_max': 145}, {'score': 0, 'i_min': 132, 'j_min': 234, 'j_max': 243, 'i_max': 139}, {'score': 0, 'i_min': 115, 'j_min': 381, 'j_max': 399, 'i_max': 126}, {'score': 0, 'i_min': 89, 'j_min': 7, 'j_max': 47, 'i_max': 109}, {'score': 0, 'i_min': 10, 'j_min': 212, 'j_max': 238, 'i_max': 29}, {'score': 0, 'i_min': 0, 'j_min': 463, 'j_max': 514, 'i_max': 13}, {'score': 0, 'i_min': 0, 'j_min': 362, 'j_max': 440, 'i_max': 8}, {'score': 0, 'i_min': 0, 'j_min': 239, 'j_max': 344, 'i_max': 13}, {'score': 0, 'i_min': 0, 'j_min': 189, 'j_max': 223, 'i_max': 9}, {'score': 0, 'i_min': 0, 'j_min': 171, 'j_max': 186, 'i_max': 5}, {'score': 0, 'i_min': 0, 'j_min': 86, 'j_max': 151, 'i_max': 12}, {'score': 0, 'i_min': 0, 'j_min': 0, 'j_max': 71, 'i_max': 12}]
+rect.L.1428608311.894414.png
+Number of rock pixels: (Sam, Rohan) = (2702, 1215)
+Number of rock clusters: (Sam, Rohan) = (8, 1)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 185, 'j_min': 36, 'j_max': 58, 'i_max': 203}, {'score': 0, 'i_min': 122, 'j_min': 74, 'j_max': 108, 'i_max': 144}, {'score': 0, 'i_min': 119, 'j_min': 32, 'j_max': 46, 'i_max': 130}, {'score': 0, 'i_min': 99, 'j_min': 52, 'j_max': 74, 'i_max': 112}, {'score': 0, 'i_min': 39, 'j_min': 33, 'j_max': 47, 'i_max': 49}, {'score': 0, 'i_min': 31, 'j_min': 49, 'j_max': 68, 'i_max': 41}, {'score': 0, 'i_min': 0, 'j_min': 44, 'j_max': 120, 'i_max': 26}, {'score': 0, 'i_min': 0, 'j_min': 7, 'j_max': 42, 'i_max': 17}]
+Rohan: [{'score': 0, 'i_min': 0, 'j_min': 8, 'j_max': 175, 'i_max': 10}]
+rect.L.1428249773.448280.png
+Number of rock pixels: (Sam, Rohan) = (579, 395)
+Number of rock clusters: (Sam, Rohan) = (5, 1)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 232, 'j_min': 88, 'j_max': 108, 'i_max': 250}, {'score': 0, 'i_min': 161, 'j_min': 91, 'j_max': 109, 'i_max': 177}, {'score': 0, 'i_min': 144, 'j_min': 43, 'j_max': 58, 'i_max': 155}, {'score': 0, 'i_min': 100, 'j_min': 445, 'j_max': 462, 'i_max': 110}, {'score': 0, 'i_min': 0, 'j_min': 356, 'j_max': 371, 'i_max': 9}]
+Rohan: [{'score': 0, 'i_min': 0, 'j_min': 370, 'j_max': 445, 'i_max': 6}]
+rect.L.1428427489.971371.png
+Number of rock pixels: (Sam, Rohan) = (138, 411)
+Number of rock clusters: (Sam, Rohan) = (1, 2)
+Bbox coords:
+Sam: [{'score': 0, 'i_min': 3, 'j_min': 309, 'j_max': 321, 'i_max': 20}]
+Rohan: [{'score': 0, 'i_min': 0, 'j_min': 394, 'j_max': 417, 'i_max': 6}, {'score': 0, 'i_min': 0, 'j_min': 222, 'j_max': 270, 'i_max': 8}]
+rect.L.1428607763.520284.png
+Number of rock pixels: (Sam, Rohan) = (0, 0)
+Number of rock clusters: (Sam, Rohan) = (0, 0)
+Bbox coords:
+Sam: []
+Rohan: []

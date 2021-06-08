@@ -1,0 +1,98 @@
+#Data augmentation file
+
+import numpy as np
+import os
+import random
+from scipy import ndarray
+
+import skimage as sk
+from skimage import transform
+from skimage import util
+from skimage import io
+
+def random_rotation(image_array: ndarray):
+    random_degree = random.uniform(-25, 25)
+    return (sk.transform.rotate(image_array, random_degree), random_degree)
+
+def set_rotation(image_array: ndarray, degree):
+    return sk.transform.rotate(image_array, degree)
+
+def random_noise(image_array: ndarray):
+    return sk.util.random_noise(image_array)
+
+def gaussian(image_array: ndarray):
+    return sk.filters.gaussian(image_array, sigma = (3.0, 3.0), truncate = 3.5, multichannel = True)
+
+def horizontal_flip(image_array: ndarray):
+    return image_array[:,::-1]
+
+def vertical_flip(image_array: ndarray):
+    return image_array[::-1,:]
+
+def run():
+    folder_path = '../data/all_navcam'
+    train_folder_path = '../data/all_navcam/left_jpgs'
+    label_folder_path = '../data/all_navcam/labels_pngs'
+
+    train_images = [os.path.join(train_folder_path, f) for f in os.listdir(train_folder_path) if os.path.isfile(os.path.join(train_folder_path, f))]
+
+    label_images = [os.path.join(label_folder_path, f) for f in os.listdir(label_folder_path) if os.path.isfile(os.path.join(label_folder_path, f))]
+
+    num_generated_files = 0
+    num_files_desired = 10000
+    total_files = len(train_images)
+    assert(len(train_images) == len(label_images))
+
+    available_tfs = {
+        'rotate': random_rotation,
+        'noise': random_noise,
+        'horizontal_flip': horizontal_flip,
+        'vertical_flip': vertical_flip,
+        'gaussian': gaussian
+        }
+
+    while num_generated_files <= num_files_desired:
+        #train_to_transform, ind = next(iter(loaders['train']))
+        #label_to_transform = datasets['train_label'][ind][0]
+        image_ind = random.randint(0, total_files-1)
+        train_path = train_images[image_ind]
+        label_path = label_images[image_ind]
+
+        train_to_transform = sk.io.imread(train_path)
+        label_to_transform = sk.io.imread(label_path)
+
+        num_tfs_to_apply = random.randint(1, 5)
+
+        num_tfs = 0
+        tf_train = None
+        tf_label = None
+        while num_tfs <= num_tfs_to_apply:
+            key = random.choice(list(available_tfs))
+            if key == 'rotate':
+                (tf_train, deg) = available_tfs[key](train_to_transform)
+            else:
+                tf_train = available_tfs[key](train_to_transform)
+            if key != 'noise' and key != 'gaussian':
+                if key == 'rotate':
+                    tf_label = set_rotation(label_to_transform, deg)
+                else:
+                    tf_label = available_tfs[key](label_to_transform)
+            #print(key)
+            num_tfs += 1
+
+        new_train_path = '%s/aug_train/augment_train_%s.png' % (folder_path, num_generated_files)
+        new_label_path = '%s/aug_label/augment_label_%s.png' % (folder_path, num_generated_files)
+
+        if type(tf_train) == np.ndarray and type(tf_label) == np.ndarray:
+            io.imsave(new_train_path, tf_train)
+            io.imsave(new_label_path, tf_label)
+            print("Generated img_%d" % num_generated_files)
+            num_generated_files += 1
+
+    print("Finished Generating")
+    return
+
+if __name__ == "__main__":
+    run()
+
+

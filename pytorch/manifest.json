@@ -1,0 +1,13 @@
+{
+    "runtime": "python",
+    "model": {
+        "modelName": "rockNet",
+        "serializedFile": "curWeights.pth",
+        "modelFile": "Net_Fcn_Mod.py",
+        "baseWeights": "densenet_cosine_264_k32.pth",
+        "modelVersion": "1.0"
+    },
+    "modelServerVersion": "1.0",
+    "implementationVersion": "1.0",
+    "specificationVersion": "1.0"
+}
