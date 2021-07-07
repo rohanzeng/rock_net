@@ -44,7 +44,7 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-modelTest = "7001.torch"
+modelTest = "7003.torch"
 setType = "valid" #"valid" or "test"
 thresh = 0.5
 
@@ -205,7 +205,7 @@ def run():
 
     print('Model Data Loaded')
 
-    setLen = 10#len(datasets[setType])
+    setLen = len(datasets[setType])
 
     lr = LogisticRegression(max_iter = 10000, penalty = 'none')
     pScoreLR = []
@@ -226,7 +226,7 @@ def run():
         curR = 0
         for itr in range(setLen):
             im, ind = next(setItr)
-            print(ind)
+            #print(ind)
             #im, ind = datasets[setType][itr]
             im = im.permute(0,2,3,1)
             out = model(im)[0]
@@ -264,8 +264,8 @@ def run():
     ax.set_ylabel('Precision')
     ax.legend(loc='center left');
 
-    print(rScoreLR)
-    print(pScoreLR)
+    #print(rScoreLR)
+    #print(pScoreLR)
     #print(rScoreL2)
     #print(pScoreL2)
 

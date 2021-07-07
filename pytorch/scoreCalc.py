@@ -41,8 +41,9 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-modelTest = "9008.torch"
+modelTest = "7007.torch"
 setType = "valid" #"valid" or "test"
+thresh = 0.5
 
 UseValidationSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
@@ -193,38 +194,51 @@ def run():
     setLen = len(datasets[setType])
 
     #Visualizing
+    setItr = iter(loaders[setType])
     for itr in range(setLen):
-        im, ind = next(iter(loaders[setType]))
+        im, ind = next(setItr)
         im = im.permute(0,2,3,1)
         out = model(im)[0]
-        #a = out.detach().numpy()[0,:,:,:] #Probability matrix
+        prob = out.detach().cpu().numpy()[0,:,:,:] #Probability matrix
         #print(a[0,:,:])
         #print(a[1,:,:])
         om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
+        om = (out.squeeze())[1].detach().cpu().numpy()
         #print(om)
         #print(om.shape)
+        #print(omi)
+        #print(omi.shape)
 
-        rohBase = om == 1 #0's as background, 1's as rocks
-        roh_bbox = compute_bbox_coordinates(rohBase, a, lookup_range = 5, verbose = 0) #bbox
+        rohBase = (om >= thresh) #.astype(int) #0's as background, 1's as rocks
+        #print(rohBase)
+        #print(rohBase.shape)
+        #print(om == 1)
+        #print((om == 1).shape)
+        roh_bbox = compute_bbox_coordinates(rohBase, prob, lookup_range = 5, verbose = 0) #bbox
 
         samBase = reverse_segmap(datasets[setType+'_label'][ind][0]) #0's as background, 1's as rocks
-        sam_bbox = compute_bbox_coordinates(samBase, a, lookup_range = 5, verbose = 0) #bbox
+        sam_bbox = compute_bbox_coordinates(samBase, prob, lookup_range = 5, verbose = 0) #bbox
 
         rohBox += len(roh_bbox)
         samBox += len(sam_bbox)
 
-        avgRSBox += len(roh_bbox)/len(sam_bbox)
+        if len(sam_bbox) != 0:
+            avgRSBox += len(roh_bbox)/len(sam_bbox)
 
         TP = (rohBase&samBase).sum()
         TN = ((1-rohBase)&(1-samBase)).sum()
         FP = ((samBase^rohBase)&rohBase).sum()
         FN = ((samBase^rohBase)&(1-rohBase)).sum()
 
-        IoU = TP/(TP+FP+FN)
-        Dice = (TP+TP)/(TP+TP+FP+FN)
+        if (TP+FP+FN != 0):
+            IoU = TP/(TP+FP+FN)
+        if (TP+TP+FP+FN != 0):
+            Dice = (TP+TP)/(TP+TP+FP+FN)
 
-        adjIoU = TP/(TP+FN)
-        adjDice = (TP+TP)/(TP+TP+FN)
+        if (TP+FN != 0):
+            adjIoU = TP/(TP+FN)
+        if (TP+TP+FN != 0):
+            adjDice = (TP+TP)/(TP+TP+FN)
 
         avgIoU += IoU
         avgDice += Dice
@@ -236,22 +250,24 @@ def run():
         sDice = 0
         #sFalse = 0
 
-        for box in sam_bbox:
-            sBox = samBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
-            rBox = rohBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
-            miniTP = (rBox&sBox).sum()
-            miniTN = ((1-rBox)&(1-sBox)).sum()
-            miniFP = ((sBox^rBox)&rBox).sum()
-            miniFN = ((sBox^rBox)&(1-rBox)).sum()
-            sIoU +=  miniTP/(miniTP+miniFP+miniFN)
-            sDice += (miniTP+miniTP)/(miniTP+miniTP+miniFP+miniFN)
-            #sFalse += 1-((c0*miniFN+c1*miniFP)/(c0*miniFN+c1*miniFP+miniTN+miniTP))
+        if len(sam_bbox) != 0:
+            for box in sam_bbox:
+                sBox = samBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
+                rBox = rohBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
+                miniTP = (rBox&sBox).sum()
+                miniTN = ((1-rBox)&(1-sBox)).sum()
+                miniFP = ((sBox^rBox)&rBox).sum()
+                miniFN = ((sBox^rBox)&(1-rBox)).sum()
+                sIoU +=  miniTP/(miniTP+miniFP+miniFN)
+                sDice += (miniTP+miniTP)/(miniTP+miniTP+miniFP+miniFN)
+                #sFalse += 1-((c0*miniFN+c1*miniFP)/(c0*miniFN+c1*miniFP+miniTN+miniTP))
 
-        avgSIoU += sIoU/len(sam_bbox)
-        avgSDice += sDice/len(sam_bbox)
+            avgSIoU += sIoU/len(sam_bbox)
+            avgSDice += sDice/len(sam_bbox)
 
-        pos = rohBase.sum()/samBase.sum()
-        avgPos += pos
+        if samBase.sum() != 0:
+            pos = rohBase.sum()/samBase.sum()
+            avgPos += pos
 
         #avgFalse += 1-((c0*FN+c1*FP)/(c0*FN+c1*FP+TN+TP))
         #avgSFalse += sFalse/len(sam_bbox)
