@@ -18,7 +18,7 @@ input_dir = './../data/all_navcam/output/train/left_jpgs'
 glob_dir = input_dir+'/*.jpg'
 label_dir = './../data/all_navcam/outputL/train/labels_pngs'
 globL_dir = label_dir+'/*.png'
-k = 20
+k = 12
 saveImages = True
 numIm = 50
 
@@ -102,16 +102,16 @@ print("Processed Images")
 kmodel = KMeans(n_clusters = k, n_jobs = -1, random_state = 728)
 kmodel.fit(pred_images)
 kpredictions = kmodel.predict(pred_images)
-shutil.rmtree('./../data/all_navcam/outputC/clusters')
+shutil.rmtree('./../data/all_navcam/outputC/clusters'+str(k))
 
 if saveImages:
     for i in range(k):
-        os.makedirs("./../data/all_navcam/outputC/clusters/cluster" + str(i))
-        os.makedirs("./../data/all_navcam/outputC/clusters/clusterL" + str(i))
+        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"/cluster"+str(i))
+        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"/clusterL"+str(i))
 
     for i in range(len(paths)):
-        shutil.copy2(paths[i], "./../data/all_navcam/outputC/clusters/cluster"+str(kpredictions[i]))
-        shutil.copy2(pathsL[i], "./../data/all_navcam/outputC/clusters/clusterL"+str(kpredictions[i]))
+        shutil.copy2(paths[i], "./../data/all_navcam/outputC/clusters"+str(k)+"/cluster"+str(kpredictions[i]))
+        shutil.copy2(pathsL[i], "./../data/all_navcam/outputC/clusters"+str(k)+"/clusterL"+str(kpredictions[i]))
     print("Saved Images")
 
 

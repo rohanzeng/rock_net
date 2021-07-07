@@ -32,10 +32,10 @@ num_classes = 2
 image_shape = (332, 514)
 num_epochs = 100
 batch_size = 1
-a = 1e-6 #1e-4
-weight_decay = 1e-6 #1e-4
+a = 1e-4
+weight_decay = 1e-4
 use_gpu = True
-#cuda0 = torch.device('cuda:0')
+cuda = torch.device('cuda:1')
 
 data_dir = "../data"
 runs_dir = "../output"
@@ -45,8 +45,8 @@ label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
 UseValidationSet = False
-UseBaseSet = False
-UseAugmentedSet = True
+UseBaseSet = True
+UseAugmentedSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
 Trained_model_path = '' #TrainedModelWeightDir+"17006.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLossGPU.txt"
@@ -69,6 +69,43 @@ class RockDataSet(Dataset):
         image = Image.open(img_loc).convert("RGB")
         tensor_image = self.transform(image)
         return tensor_image, idx #, self.total_imgs[idx]
+
+class IoULoss(nn.Module):
+    def __init__(self, weight=None, size_average=True):
+        super(IoULoss, self).__init__()
+
+    def forward(self, inputs, targets, smooth=1):
+
+        #inputs = torch.sigmoid(inputs)
+
+        #m = nn.Softmax(dim = 0)
+
+        inputs = inputs[0].view(-1)
+        targets = targets[0].view(-1)
+
+        intersection = (inputs*targets).sum()
+        total = (inputs+targets).sum()
+        union = total-intersection
+
+        #intersection = torch.logical_and(targets, inputs)
+        #union = torch.logical_or(targets, inputs)
+        IoU = (intersection+smooth)/(union+smooth)
+
+        return 1-IoU
+
+class DiceLoss(nn.Module):
+    def __init__(self, weight = None, size_average = True):
+        super(DiceLoss, self).__init__()
+
+    def forward(self, inputs, targets, smooth = 1):
+
+        inputs = inputs[0].view(-1)
+        targets = targets[0].view(-1)
+
+        intersection = (inputs*targets).sum()
+        dice = (2.*intersection+smooth)/((inputs*inputs).sum() + (targets*targets).sum() + smooth)
+
+        return 1-dice
 
 def load_data():
     #Define transforms
@@ -130,37 +167,6 @@ def load_model():
 
     return model
 
-'''
-def iou(pred, target, n_classes = 2):
-    ious = []
-    pred = pred.view(-1)
-    target = target.view(-1)
-
-    for cls in range(1, n_classes):
-        pred_inds = pred == cls
-        target_inds = target == cls
-        intersection = (pred_inds[target_inds]).long().sum().data.cpu().item()
-        union = pred_inds.long().sum().data.cpu().item() + target_inds.long().sum().data.cpu().item() - intersection
-        if union == 0:
-            ious.append(float('nan'))
-        else:
-            ious.append(float(intersection)/float(max(union, 1)))
-    print(np.array(ious).size)
-    return np.array(ious)
-
-
-def iou(output, label):
-    smooth = 1e-7
-    output = output.squeeze(1).int()
-    label = label.squeeze(1).int()
-    intersection = (output & label).float().sum((1,2))
-    union = (output | label).float().sum((1,2))
-
-    iou = (intersection + smooth)/ (union + smooth)
-    thresholded = torch.clamp(20*(iou-0.5), 0, 10).ceil() / 10
-    return thresholded.unsqueeze(1)
-'''
-
 def run():
 
     ###Load Data
@@ -186,11 +192,13 @@ def run():
     print('Model Data Loaded')
 
     #Training
-    num = 8
+    num = 10
     avgLoss = -1
     if UseBaseSet:
+        #Loss = DiceLoss()
+        baseItr = iter(loaders['train'])
         for itr in range(len(datasets['train'])):
-            im, ind = next(iter(loaders['train']))
+            im, ind = next(baseItr)
             #plt.imshow(im[0,:,:,:].permute(1,2,0))
             #plt.savefig('imnorm.png')
             #plt.imshow(datasets['orig'][ind][0].permute(1,2,0))
@@ -205,33 +213,7 @@ def run():
             model.zero_grad()
             loss = -torch.mean((OneHotLabels * torch.log(prob + 0.0000001)))
 
-            '''
-            fill, classes, h, w = prob.size()
-            truth = torch.zeros(h, w).int()
-            base = torch.zeros(h, w).int()
-            probT = OneHotLabels[0]
-            probB = prob[0]
-            truth[probT[1] > probT[0]] = 1
-            base[probB[1] > probB[0]] = 1
-
-            truth = OneHotLabels[0][1] > OneHotLabels[0][0]
-            base = prob[0][1] > prob[0][0]
-            #truth = truth.numpy().astype(np.uint8)
-            #base = base.numpy().astype(np.uint8)
-            print(type(truth))
-            print(type(base))
-            #print(truth)
-            #print(base)
-            TP = (truth&base).sum()
-            FP = ((truth^base)&base).sum()
-            FN = ((truth^base)&(~base)).sum()
-            loss = TP/(TP+FP+FN)
-            '''
-
-            #lbl = prob[0].cpu().detach().numpy()#.reshape(-1)
-            #target = OneHotLabels[0].cpu().detach().numpy()#.reshape(-1)
-            #loss = jsc(target, lbl)
-            #loss = iou(prob, OneHotLabels)
+            #loss = Loss(prob, OneHotLabels)
 
             if avgLoss == -1:
                 avgLoss = float(loss.data.cpu().numpy())
@@ -260,8 +242,9 @@ def run():
                 SumLoss=np.float64(0.0)
                 NBatches = int(len(datasets['valid']))
                 print("Calculating Validation on " + str(NBatches) + " Images")
+                valItr = iter(loaders['valid'])
                 for i in range(NBatches):# Go over all validation images
-                    im, ind = next(iter(loaders['valid']))
+                    im, ind = next(valItr)
                     lab = datasets['valid_label'][ind][0]
                     OneHotLabels = pp.labelConvert(lab, num_classes).to('cuda')
                     prob, lb = model.forward(im.permute(0,2,3,1))
@@ -277,8 +260,9 @@ def run():
     if UseAugmentedSet:
         if not UseBaseSet:
             itr = 0
+        augItr = iter(loaders['aug'])
         for itra in range(len(datasets['aug'])):
-            im, ind = next(iter(loaders['aug']))
+            im, ind = next(augItr)
             lab = datasets['aug_label'][ind][0]
             OneHotLabels = pp.labelConvert(lab, num_classes).to('cuda')
             prob, lb = model.forward(im.permute(0,2,3,1))#.to('cuda'))
@@ -313,8 +297,9 @@ def run():
                 SumLoss=np.float64(0.0)
                 NBatches = int(len(datasets['valid']))
                 print("Calculating Validation on " + str(NBatches) + " Images")
+                valItr = iter(loaders['valid'])
                 for i in range(NBatches):# Go over all validation images
-                    im, ind = next(iter(loaders['valid']))
+                    im, ind = next(valItr)
                     lab = datasets['valid_label'][ind][0]
                     OneHotLabels = pp.labelConvert(lab, num_classes).to('cuda')
                     prob, lb = model.forward(im.permute(0,2,3,1))
@@ -327,6 +312,8 @@ def run():
                     f.write("\n" + str(adjItr) + "\t" + str(SumLoss))
                     f.close()
         print("Finished Aug Set")
+
+    torch.cuda.empty_cache()
 
     return
 

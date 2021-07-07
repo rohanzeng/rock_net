@@ -47,8 +47,9 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-clusters = [4,5,6]
+clusters = [0,17]
 clus_dir = "../data/all_navcam/outputC"
+numClus = 20
 
 UseValidationSet = False
 UseBaseSet = True
@@ -65,12 +66,12 @@ def clusterDir():
     for file in os.listdir(clus_dir+"/label"):
         os.remove(os.path.join(clus_dir+"/label", file))
     for i in clusters:
-        for file in glob.glob(clus_dir+"/clusters/cluster"+str(i)+"/*.jpg"):
+        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+"/cluster"+str(i)+"/*.jpg"):
             curIm = cv2.imread(file)
             #print(curIm)
             #print(file[-28:])
             cv2.imwrite(clus_dir+"/train/"+file[-28:], curIm)
-        for file in glob.glob(clus_dir+"/clusters/clusterL"+str(i)+"/*.png"):
+        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+"/clusterL"+str(i)+"/*.png"):
             curIm = cv2.imread(file)
             cv2.imwrite(clus_dir+"/label/"+file[-28:], curIm)
     return
@@ -137,11 +138,11 @@ def load_data():
     t_transform = transforms.Compose([transforms.ToTensor(), normalize])
     l_transform = transforms.Compose([transforms.ToTensor()])
 
-    t_set = RockDataSet(base_dir + '/train/left_jpgs', t_transform)
+    t_set = RockDataSet(clus_dir + '/train', t_transform)
     ta_set = RockDataSet(aug_dir + '/aug_train', t_transform)
     v_set = RockDataSet(base_dir + '/val/left_jpgs', t_transform)
     te_set = RockDataSet(base_dir + '/test/left_jpgs', t_transform)
-    lt_set = RockDataSet(label_dir + '/train/labels_pngs', l_transform)
+    lt_set = RockDataSet(clus_dir + '/label', l_transform)
     lta_set = RockDataSet(aug_dir + '/aug_label', l_transform)
     lv_set = RockDataSet(label_dir + '/val/labels_pngs', l_transform)
     lte_set = RockDataSet(label_dir + '/test/labels_pngs', l_transform)
@@ -217,7 +218,7 @@ def run():
     print('Model Data Loaded')
 
     #Training
-    num = 10
+    num = 11
     avgLoss = -1
     if UseBaseSet:
         #Loss = DiceLoss()
@@ -248,7 +249,7 @@ def run():
             loss.backward()
             optimizer.step()
 
-            if (itr-num) % 1000 == 0 and itr > num:
+            if ((itr-num) % 100 == 0 and itr > num) or (itr == len(datasets['train'])-1):
                 print("Saving Model to file in " + TrainedModelWeightDir)
                 torch.save(model.state_dict(), TrainedModelWeightDir + "/" + str(itr) + ".torch")
                 print("model saved")

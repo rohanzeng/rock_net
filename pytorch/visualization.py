@@ -43,7 +43,7 @@ vgg_path = "../data/rvgg"
 
 UseValidationSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
-Trained_model_path = TrainedModelWeightDir+"8005.torch"
+Trained_model_path = TrainedModelWeightDir+"247.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLoss.txt"
 ValidLossTxtFile = TrainedModelWeightDir + "ValidLoss.txt"
 Pretrained_Encoder_Weights = 'densenet_cosine_264_k32.pth'
@@ -79,7 +79,7 @@ def load_data():
     orig_set = RockDataSet(training_dir + '/left_jpgs', l_transform)
 
     #Set up loader for both train and validation sets
-    vis_loader = DataLoader(vis_set, batch_size = batch_size, shuffle = True)
+    vis_loader = DataLoader(vis_set, batch_size = batch_size, shuffle = False)
 
     datasets = {'visual': vis_set, 'label': l_set, 'orig': orig_set}
     loaders = {'visual': vis_loader}
@@ -254,8 +254,9 @@ def run():
     print('Model Data Loaded')
 
     #Visualizing
+    it = iter(loaders['visual'])
     for itr in range(set_len):
-        im, ind, pre = next(iter(loaders['visual']))
+        im, ind, pre = next(it)
         im = im.permute(0,2,3,1)
         out = model(im)[0]
         a = out.detach().numpy()[0,:,:,:]
