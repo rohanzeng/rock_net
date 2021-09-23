@@ -10,24 +10,34 @@ from skimage import transform
 from skimage import util
 from skimage import io
 
-def random_rotation(image_array: ndarray):
+def random_rotation(image_array):
     random_degree = random.uniform(-25, 25)
     return (sk.transform.rotate(image_array, random_degree), random_degree)
 
-def set_rotation(image_array: ndarray, degree):
+def set_rotation(image_array, degree):
     return sk.transform.rotate(image_array, degree)
 
-def random_noise(image_array: ndarray):
+def random_noise(image_array):
     return sk.util.random_noise(image_array)
 
-def gaussian(image_array: ndarray):
-    return sk.filters.gaussian(image_array, sigma = (3.0, 3.0), truncate = 3.5, multichannel = True)
+def gaussian(image_array):
+    return sk.filter.gaussian_filter(image_array, sigma = (3.0, 3.0))#, truncate = 3.5, multichannel = True)
 
-def horizontal_flip(image_array: ndarray):
+def horizontal_flip(image_array):
     return image_array[:,::-1]
 
-def vertical_flip(image_array: ndarray):
+def vertical_flip(image_array):
     return image_array[::-1,:]
+
+def random_shift(image_array):
+    random_unit_x = random.uniform(-25, 25)
+    random_unit_y = random.uniform(-25, 25)
+    tform = sk.transform.SimilarityTransform(translation=(random_unit_x, random_unit_y))
+    return (sk.transform.warp(image_array, tform), random_unit_x, random_unit_y)
+
+def set_shift(image_array, shift_x, shift_y):
+    tform = sk.transform.SimilarityTransform(translation=(shift_x, shift_y))
+    return sk.transform.warp(image_array, tform)
 
 def run():
     folder_path = '../data/all_navcam'
@@ -36,19 +46,20 @@ def run():
 
     train_images = [os.path.join(train_folder_path, f) for f in os.listdir(train_folder_path) if os.path.isfile(os.path.join(train_folder_path, f))]
 
-    label_images = [os.path.join(label_folder_path, f) for f in os.listdir(label_folder_path) if os.path.isfile(os.path.join(label_folder_path, f))]
+    #label_images = [os.path.join(label_folder_path, f) for f in os.listdir(label_folder_path) if os.path.isfile(os.path.join(label_folder_path, f))]
 
-    num_generated_files = 0
-    num_files_desired = 10000
+    num_generated_files = 5530
+    num_files_desired = 50000
     total_files = len(train_images)
-    assert(len(train_images) == len(label_images))
+    #assert(len(train_images) == len(label_images))
 
     available_tfs = {
         'rotate': random_rotation,
         'noise': random_noise,
         'horizontal_flip': horizontal_flip,
         'vertical_flip': vertical_flip,
-        'gaussian': gaussian
+        'gaussian': gaussian,
+        'shift': random_shift
         }
 
     while num_generated_files <= num_files_desired:
@@ -56,7 +67,8 @@ def run():
         #label_to_transform = datasets['train_label'][ind][0]
         image_ind = random.randint(0, total_files-1)
         train_path = train_images[image_ind]
-        label_path = label_images[image_ind]
+        #label_path = label_images[image_ind]
+        label_path = label_folder_path+train_path[-29:-4]+".png"
 
         train_to_transform = sk.io.imread(train_path)
         label_to_transform = sk.io.imread(label_path)
@@ -70,14 +82,18 @@ def run():
             key = random.choice(list(available_tfs))
             if key == 'rotate':
                 (tf_train, deg) = available_tfs[key](train_to_transform)
+            elif key == 'shift':
+                (tf_train, shift_x, shift_y) = available_tfs[key](train_to_transform)
             else:
                 tf_train = available_tfs[key](train_to_transform)
             if key != 'noise' and key != 'gaussian':
                 if key == 'rotate':
                     tf_label = set_rotation(label_to_transform, deg)
+                elif key == 'shift':
+                    tf_label = set_shift(label_to_transform, shift_x, shift_y)
                 else:
                     tf_label = available_tfs[key](label_to_transform)
-            #print(key)
+            print(key)
             num_tfs += 1
 
         new_train_path = '%s/aug_train/augment_train_%s.png' % (folder_path, num_generated_files)

@@ -14,11 +14,11 @@ import glob
 import shutil
 
 #Parameters
-input_dir = './../data/all_navcam/output/train/left_jpgs'
+input_dir = './../data/all_navcam/left_jpgs'
 glob_dir = input_dir+'/*.jpg'
-label_dir = './../data/all_navcam/outputL/train/labels_pngs'
+label_dir = './../data/all_navcam/labels_pngs'
 globL_dir = label_dir+'/*.png'
-k = 12
+k = 18
 saveImages = True
 numIm = 50
 
@@ -95,6 +95,7 @@ with torch.no_grad():
         predictions[count] = (model(image.reshape(-1, 224, 224, 3).permute(0,3,1,2)))
         count += 1
     pred_images = predictions.reshape(images.shape[0], -1)
+    #torch.save(model.state_dict(), "classNet.torch")
 print("Processed Images")
 
 
@@ -102,16 +103,16 @@ print("Processed Images")
 kmodel = KMeans(n_clusters = k, n_jobs = -1, random_state = 728)
 kmodel.fit(pred_images)
 kpredictions = kmodel.predict(pred_images)
-shutil.rmtree('./../data/all_navcam/outputC/clusters'+str(k))
+shutil.rmtree('./../data/all_navcam/outputC/clusters'+str(k)+'a')
 
 if saveImages:
     for i in range(k):
-        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"/cluster"+str(i))
-        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"/clusterL"+str(i))
+        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"a"+"/cluster"+str(i))
+        os.makedirs("./../data/all_navcam/outputC/clusters"+str(k)+"a"+"/clusterL"+str(i))
 
     for i in range(len(paths)):
-        shutil.copy2(paths[i], "./../data/all_navcam/outputC/clusters"+str(k)+"/cluster"+str(kpredictions[i]))
-        shutil.copy2(pathsL[i], "./../data/all_navcam/outputC/clusters"+str(k)+"/clusterL"+str(kpredictions[i]))
+        shutil.copy2(paths[i], "./../data/all_navcam/outputC/clusters"+str(k)+"a"+"/cluster"+str(kpredictions[i]))
+        shutil.copy2(pathsL[i], "./../data/all_navcam/outputC/clusters"+str(k)+"a"+"/clusterL"+str(kpredictions[i]))
     print("Saved Images")
 
 
