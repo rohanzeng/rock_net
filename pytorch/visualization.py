@@ -8,7 +8,7 @@ import os
 import natsort
 import copy
 import time
-import cv2
+#import cv2
 
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
@@ -35,6 +35,7 @@ a = 1e-4
 weight_decay = 1e-4
 use_gpu = False
 set_len = 10
+thresh = 0.15
 
 data_dir = "../data"
 runs_dir = "./outputs"
@@ -43,7 +44,7 @@ vgg_path = "../data/rvgg"
 
 UseValidationSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
-Trained_model_path = TrainedModelWeightDir+"247.torch"
+Trained_model_path = TrainedModelWeightDir+"7002.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLoss.txt"
 ValidLossTxtFile = TrainedModelWeightDir + "ValidLoss.txt"
 Pretrained_Encoder_Weights = 'densenet_cosine_264_k32.pth'
@@ -141,6 +142,7 @@ def decode_segmap(image, bc, nc = num_classes):
 
     return rgb
 
+'''
 def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
 
     bbox_list = list()
@@ -173,8 +175,8 @@ def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
         bbox = {'i_min': y, 'j_min': x, 'i_max': y+h, 'j_max': x+w, 'score': score}
         bbox_list.append(bbox)
     return bbox_list
-
-'''def compute_bbox_coordinates(mask_img, lookup_range, verbose = 0):
+'''
+def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
 
     bbox_list = list()
     visited_pixels = list()
@@ -229,7 +231,7 @@ def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
         print("BBOX Found: %d" % bbox_found)
 
     return bbox_list
-'''
+
 
 def run():
 
@@ -262,12 +264,16 @@ def run():
         a = out.detach().numpy()[0,:,:,:]
         #print(a[0,:,:])
         #print(a[1,:,:])
-        om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
+
+        #om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
+        omBase = out.squeeze().detach().cpu().numpy()
+        #coordBase = np.zeros((omBase.shape[1], omBase.shape[2]))
+        coordBase = ((omBase[1,:,:]+0.5-thresh)>(omBase[0,:,:])).astype(int)
         #print(om)
         #print(om.shape)
-        coordBase = om == 1
+        #coordBase = om == 1
         bbox_coords = compute_bbox_coordinates(coordBase, a, lookup_range = 5, verbose = 0)
-        rgb = decode_segmap(om, bbox_coords)
+        rgb = decode_segmap(coordBase, bbox_coords)
         base = pre[0]
         plt.imshow(rgb)
         net = 'im' + str(itr) + '_net.png' #base[:-4] + '_net' + '.png'

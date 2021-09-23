@@ -44,7 +44,7 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-modelTest = "7003.torch"
+modelTest = "7006.torch"
 setType = "valid" #"valid" or "test"
 thresh = 0.5
 

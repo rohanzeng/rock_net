@@ -41,9 +41,9 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-modelTest = "7007.torch"
+modelTest = "57216.torch"
 setType = "valid" #"valid" or "test"
-thresh = 0.5
+thresh = 0.15
 
 UseValidationSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
@@ -287,7 +287,8 @@ def run():
     #avgSFalse /= setLen
 
     with open(ScoreTxtFile, "a") as f:
-        f.write("Model "+str(modelTest)+" results on "+setType+" set\n"+"Total Number of Rock Clusters:"+
+        f.write("Model "+str(modelTest)+" results on "+setType+" set, thresh = "+str(thresh)+"\n"+
+        "Total Number of Rock Clusters:"+
         "(Sam, Rohan) = ("+str(samBox)+", "+str(rohBox)+")\n"+"Average Number of Rock Clusters: (Sam, Rohan)"+
         "= ("+str(samBox/setLen)+", "+str(rohBox/setLen)+")\n"+"Average Ratio Rohan:Sam Boxes = "+
         str(avgRSBox)+"\n"+"Average IoU and Dice Scores: (IoU, Dice) = ("+str(avgIoU)+", "+str(avgDice)+

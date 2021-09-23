@@ -180,10 +180,12 @@ class rockHandler(BaseHandler):
         """
         class_id = 1
 
-        out = output[0] #output.detach().numpy()[0,:,:,:]
+        thresh = 0.2
+        out = output[0].cpu().numpy() #output.detach().numpy()[0,:,:,:]
         rgb, h, w = out.size()
-        sing_im = np.zeros((h,w))
-        sing_im[out[1] > out[0]] = 1
+        #sing_im = np.zeros((h,w))
+        #sing_im[out[1] > out[0]] = 1
+        sing_im = ((out[1,:,:]+0.5-thresh)>(omBase[0,:,:])).astype(int)
         #print(out)
         bbox_coords = compute_bbox_coordinates(sing_im, out, lookup_range=5, verbose=0)
         #print(bbox_coords)

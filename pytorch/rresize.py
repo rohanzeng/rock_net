@@ -22,11 +22,14 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from PIL import Image
+from resizeimage import resizeimage
 #from skimage import io
 #import helper
 
 import preprocess as pp
 import Net_Fcn_Mod as nf
+
+import cv2
 
 num_classes = 2
 image_shape = (332, 514)
@@ -41,12 +44,12 @@ data_dir = "../data"
 runs_dir = "../output"
 aug_dir = "../data/all_navcam"
 base_dir = "../data/all_navcam/output"
-label_dir = "../data/all_navcam/outputL"
+label_dir = "../data/all_navcam/labels_resize"
 vgg_path = "../data/rvgg"
 
 UseValidationSet = False
 UseBaseSet = True
-UseAugmentedSet = True
+UseAugmentedSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
 Trained_model_path = TrainedModelWeightDir+"7000.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLossGPU.txt"
@@ -55,11 +58,12 @@ Pretrained_Encoder_Weights = "densenet_cosine_264_k32.pth"
 
 #Dataset Class: Gets items and returns the index for access by other datasets
 class RockDataSet(Dataset):
-    def __init__(self, main_dir, transform):
+    def __init__(self, main_dir, transform, label):
         self.main_dir = main_dir
         self.transform = transform
         all_imgs = os.listdir(main_dir)
         self.total_imgs = natsort.natsorted(all_imgs)
+        self.label = label
 
     def __len__(self):
         return len(self.total_imgs)
@@ -67,6 +71,12 @@ class RockDataSet(Dataset):
     def __getitem__(self, idx):
         img_loc = os.path.join(self.main_dir, self.total_imgs[idx])
         image = Image.open(img_loc).convert("RGB")
+        #image = cv2.resize(np.float32image, image_shape, interpolation = cv2.INTER_AREA)
+        #image = image.resize(image_shape, Image.ANTIALIAS)
+        #print(image.size)
+        if self.label:
+            image = resizeimage.resize_contain(image, (514, 332))
+        #print(image.size)
         tensor_image = self.transform(image)
         return tensor_image, idx #, self.total_imgs[idx]
 
@@ -115,23 +125,35 @@ def load_data():
     t_transform = transforms.Compose([transforms.ToTensor(), normalize])
     l_transform = transforms.Compose([transforms.ToTensor()])
 
-    t_set = RockDataSet(base_dir + '/train/left_jpgs', t_transform)
-    ta_set = RockDataSet(aug_dir + '/aug_train', t_transform)
-    v_set = RockDataSet(base_dir + '/val/left_jpgs', t_transform)
-    te_set = RockDataSet(base_dir + '/test/left_jpgs', t_transform)
-    lt_set = RockDataSet(label_dir + '/train/labels_pngs', l_transform)
-    lta_set = RockDataSet(aug_dir + '/aug_label', l_transform)
-    lv_set = RockDataSet(label_dir + '/val/labels_pngs', l_transform)
-    lte_set = RockDataSet(label_dir + '/test/labels_pngs', l_transform)
+    t_dataset = RockDataSet(aug_dir+'/left_resize', t_transform, False)
+    l_dataset = RockDataSet(label_dir, l_transform, True)
+
+
+    t_len, v_len = int(0.5*len(t_dataset)), int(len(t_dataset)*0.25)
+    te_len = v_len
+    if t_len+v_len+te_len != len(t_dataset):
+        diff = len(t_dataset)-t_len-v_len-te_len
+        te_len = te_len+diff
+    t_set, v_set, te_set = random_split(t_dataset, [t_len, v_len, te_len])
+
+
+    #t_set = RockDataSet(base_dir + '/train/left_jpgs', t_transform)
+    #ta_set = RockDataSet(aug_dir + '/aug_train', t_transform)
+    #v_set = RockDataSet(base_dir + '/val/left_jpgs', t_transform)
+    #te_set = RockDataSet(base_dir + '/test/left_jpgs', t_transform)
+    #lt_set = RockDataSet(label_dir + '/train/labels_pngs', l_transform)
+    #lta_set = RockDataSet(aug_dir + '/aug_label', l_transform)
+    #lv_set = RockDataSet(label_dir + '/val/labels_pngs', l_transform)
+    #lte_set = RockDataSet(label_dir + '/test/labels_pngs', l_transform)
 
     #Set up loader for both train and validation sets
     t_loader = DataLoader(t_set, batch_size = batch_size, shuffle = True)
-    ta_loader = DataLoader(ta_set, batch_size = batch_size, shuffle = True)
+    #ta_loader = DataLoader(ta_set, batch_size = batch_size, shuffle = True)
     v_loader = DataLoader(v_set, batch_size = batch_size, shuffle = False)
     te_loader = DataLoader(te_set, batch_size = batch_size, shuffle = True)
 
-    datasets = {'train_label': lt_set, 'valid_label': lv_set, 'aug_label': lta_set, 'train': t_set, 'aug': ta_set, 'valid': v_set}
-    loaders = {'train': t_loader, 'valid': v_loader, 'test': te_loader, 'aug': ta_loader}
+    datasets = {'train': t_set, 'valid': v_set, 'label': l_dataset}
+    loaders = {'train': t_loader, 'valid': v_loader, 'test': te_loader}
 
     return datasets, loaders
 
@@ -192,18 +214,20 @@ def run():
     print('Model Data Loaded')
 
     #Training
-    num = 10
+    num = 12
     avgLoss = -1
     if UseBaseSet:
         #Loss = DiceLoss()
         baseItr = iter(loaders['train'])
         for itr in range(len(datasets['train'])):
             im, ind = next(baseItr)
+            #plt.imshow(im)
+            #print(im.shape)
             #plt.imshow(im[0,:,:,:].permute(1,2,0))
             #plt.savefig('imnorm.png')
             #plt.imshow(datasets['orig'][ind][0].permute(1,2,0))
             #plt.savefig('imorig.png')
-            lab = datasets['train_label'][ind][0]
+            lab = datasets['label'][ind][0]
             #plt.imshow(lab.permute(1,2,0))
             #plt.savefig('imlab.png')
             OneHotLabels = pp.labelConvert(lab, num_classes).to('cuda')
@@ -223,7 +247,7 @@ def run():
             loss.backward()
             optimizer.step()
 
-            if itr == len(datasets['train'])-1: # (itr-num) % 1000 == 0 and itr > num:
+            if (itr-num) % 1000 == 0 and itr > num:
                 print("Saving Model to file in " + TrainedModelWeightDir)
                 torch.save(model.state_dict(), TrainedModelWeightDir + "/" + str(itr) + ".torch")
                 print("model saved")
@@ -278,7 +302,7 @@ def run():
 
             adjItr = itr+itra+1
 
-            if itra == len(datasets['aug'])-1: #if (adjItr-num) % 1000 == 0 and adjItr > num:
+            if (adjItr-num) % 1000 == 0 and adjItr > num:
                 print("Saving Model to file in " + TrainedModelWeightDir)
                 torch.save(model.state_dict(), TrainedModelWeightDir + "/" + str(adjItr) + ".torch")
                 print("model saved")
@@ -323,5 +347,4 @@ def run():
 #----------------------
 
 if __name__ == "__main__":
-    with torch.cuda.device(0):
-        run()
+    run()

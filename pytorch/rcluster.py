@@ -47,15 +47,15 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
-clusters = [0,17]
+clusters = [0,5,7,9]
 clus_dir = "../data/all_navcam/outputC"
-numClus = 20
+numClus = 18
 
 UseValidationSet = False
 UseBaseSet = True
 UseAugmentedSet = False
 TrainedModelWeightDir = "TrainedModelWeights/"
-Trained_model_path = '' #TrainedModelWeightDir+"17006.torch"
+Trained_model_path = TrainedModelWeightDir+"7000.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLossGPU.txt"
 ValidLossTxtFile = TrainedModelWeightDir + "ValidLossGPU.txt"
 Pretrained_Encoder_Weights = "densenet_cosine_264_k32.pth"
@@ -66,12 +66,12 @@ def clusterDir():
     for file in os.listdir(clus_dir+"/label"):
         os.remove(os.path.join(clus_dir+"/label", file))
     for i in clusters:
-        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+"/cluster"+str(i)+"/*.jpg"):
+        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+'/train'+"/cluster"+str(i)+"/*.jpg"):
             curIm = cv2.imread(file)
             #print(curIm)
             #print(file[-28:])
             cv2.imwrite(clus_dir+"/train/"+file[-28:], curIm)
-        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+"/clusterL"+str(i)+"/*.png"):
+        for file in glob.glob(clus_dir+"/clusters"+str(numClus)+'/trainL'+"/clusterL"+str(i)+"/*.png"):
             curIm = cv2.imread(file)
             cv2.imwrite(clus_dir+"/label/"+file[-28:], curIm)
     return
@@ -249,7 +249,7 @@ def run():
             loss.backward()
             optimizer.step()
 
-            if ((itr-num) % 100 == 0 and itr > num) or (itr == len(datasets['train'])-1):
+            if itr == len(datasets['train'])-1: #((itr-num) % 1000 == 0 and itr > num) or (itr == len(datasets['train'])-1):
                 print("Saving Model to file in " + TrainedModelWeightDir)
                 torch.save(model.state_dict(), TrainedModelWeightDir + "/" + str(itr) + ".torch")
                 print("model saved")
