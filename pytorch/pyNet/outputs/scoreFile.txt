@@ -1,0 +1,63 @@
+Model deep1012.torch results on valid set, thresh = 0.5
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 2237)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 1.446959896507115)
+Average Ratio Rohan:Sam Boxes = 0.2646097708171909
+Average IoU and Dice Scores: (IoU, Dice) = (0.06519215430902929, 0.1024553928650647)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.07161648726001982, 0.11077878559928997)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.03762844525790971, 0.05400719071243805)
+Average Ratio Rohan:Sam Rock Pixels = 0.12929571002391738
+
+Model deep1012.torch results on valid set, thresh = 0.2
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 8847)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 5.722509702457956)
+Average Ratio Rohan:Sam Boxes = 1.0352736521057904
+Average IoU and Dice Scores: (IoU, Dice) = (0.15632941309275045, 0.23104781259289553)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.2751175358578998, 0.36077914726066723)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.14909053280572113, 0.1926446365534494)
+Average Ratio Rohan:Sam Rock Pixels = 1.170139738915965
+
+Model deep1012.torch results on valid set, thresh = 0.15
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 11249)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 7.276196636481242)
+Average Ratio Rohan:Sam Boxes = 1.3061748923924459
+Average IoU and Dice Scores: (IoU, Dice) = (0.16238621864066466, 0.24112506166850287)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.3320045698559127, 0.42129974221937233)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.17863102227482536, 0.22810385666447164)
+Average Ratio Rohan:Sam Rock Pixels = 1.7033965475584076
+
+Model deep1012.torch results on valid set, thresh = 0.1
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 14557)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 9.415912031047865)
+Average Ratio Rohan:Sam Boxes = 1.7432319746739962
+Average IoU and Dice Scores: (IoU, Dice) = (0.16235050475358548, 0.24388758289724782)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.4071322836369553, 0.49666066584093077)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.2166618382140508, 0.2745816731835598)
+Average Ratio Rohan:Sam Rock Pixels = 2.659445509180636
+
+Model deep1012.torch results on valid set, thresh = 0.05
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 19626)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 12.694695989650711)
+Average Ratio Rohan:Sam Boxes = 2.53677091295313
+Average IoU and Dice Scores: (IoU, Dice) = (0.14464761202545806, 0.22481564356679284)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.5206844405659304, 0.6053648033969732)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.2728661585675275, 0.34294891759596047)
+Average Ratio Rohan:Sam Rock Pixels = 4.792275883898711
+
+Model 50001a.torch results on valid set, thresh = 0.5
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 1715)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 1.1093143596377748)
+Average Ratio Rohan:Sam Boxes = 0.22768785165662705
+Average IoU and Dice Scores: (IoU, Dice) = (0.05747733783082596, 0.09000771871820624)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.06614601016875794, 0.09951604929567037)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.035010627894103565, 0.05015331571020072)
+Average Ratio Rohan:Sam Rock Pixels = 0.10261766833316241
+
+Model 50001a.torch results on valid set, thresh = 0.15
+Total Number of Rock Clusters:(Sam, Rohan) = (7206, 53168)
+Average Number of Rock Clusters: (Sam, Rohan)= (4.661060802069858, 34.39068564036223)
+Average Ratio Rohan:Sam Boxes = 9.531000186240465
+Average IoU and Dice Scores: (IoU, Dice) = (0.024998048844392627, 0.04494925518497588)
+Average Adjusted IoU and Dice Scores: (IoU, Dice) = (0.6600745242279964, 0.7427717088568098)
+Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = (0.3230657379213662, 0.4050547077454341)
+Average Ratio Rohan:Sam Rock Pixels = 270.57236739874605
+

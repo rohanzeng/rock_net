@@ -1,0 +1,15 @@
+Model 7002.torch results on valid set, thresh = 0.45
+Recall Score:1.0
+Average Centroid Distance Score (Distance = 150):0.22451781325928225
+Average Centroid Coverage Score:0.006965195461599839
+
+Model 7002.torch results on valid set, thresh = 0.3
+Recall Score:1.0
+Average Centroid Distance Score (Distance = 150):0.22451781325928225
+Average Centroid Coverage Score:0.006965195461599839
+
+Model 7002.torch results on valid set, thresh = 0.15
+Recall Score:1.0
+Average Centroid Distance Score (Distance = 150):0.22451781325928225
+Average Centroid Coverage Score:0.006965195461599839
+
