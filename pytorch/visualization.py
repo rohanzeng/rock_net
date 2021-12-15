@@ -1,3 +1,5 @@
+# Visualize the base image, base label, and network label output of a trained model on sets of training images
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -276,12 +278,18 @@ def run():
         rgb = decode_segmap(coordBase, bbox_coords)
         base = pre[0]
         plt.imshow(rgb)
+        
+        # Net is the output of the network
         net = 'im' + str(itr) + '_net.png' #base[:-4] + '_net' + '.png'
         plt.savefig(runs_dir + '/' + net)
         plt.imshow(datasets['orig'][ind][0].permute(1,2,0))
+        
+        # Orig is the original base image
         orig = 'im' + str(itr) + '_orig.png' #base[:-4] + '_orig' + '.png'
         plt.savefig(runs_dir + '/' + orig)
         plt.imshow(datasets['label'][ind][0].permute(1,2,0))
+        
+        # Lab is the labeled original base image
         lab = 'im' + str(itr) + '_lab.png' #base[:-4] + '_lab' + '.png'
         plt.savefig(runs_dir + '/' + lab)
         print('image ' + str(itr) + '/' + str(set_len) + ' saved')
