@@ -1,3 +1,5 @@
+# Checks for GPU presence in the current machine
+
 import torch
 
 def run():
