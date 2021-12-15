@@ -1,3 +1,8 @@
+# Manually modify the training labels to increase the size of the blobs
+# Idea was to enlarge them so that the network would be more lenient about semantic segmentation, as it tended to be conservative in its rock predictions
+# Note that this was an experiment and is generally not the best practice for network training
+# Note that output image was not necessarily the correct size, so some small modifications may be needed
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -40,6 +45,7 @@ base_dir = "../data/all_navcam"
 UseValidationSet = False
 UseBaseSet = True
 
+# Select how much to scale the green blobs in the image
 scale_percent = 120
 w = int(image_shape[1]*scale_percent/100)
 h = int(image_shape[0]*scale_percent/100)
