@@ -1,4 +1,5 @@
-#Custom Handler for RockNet
+#Custom Handler for RockNet (for use in Hologram, using the water classification framework)
+
 import os
 import io
 
@@ -46,75 +47,7 @@ def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
         bbox_list.append(bbox)
     return bbox_list
 
-
-    '''
-    bbox_list = list()
-    visited_pixels = list()
-
-    bbox_found = 0
-
-    for i in range(mask_img.shape[0]):
-        for j in range(mask_img.shape[1]):
-
-            if mask_img[i,j] == 1 and (i, j) not in visited_pixels:
-
-                bbox_found += 1
-
-                pixels_to_visit = list()
-
-                count = 0
-
-                bbox = {'i_min': i, 'j_min': j, 'i_max' : i, 'j_max':j, 'score':0}
-
-                pxl_i = i
-                pxl_j = j
-
-                while True:
-                    visited_pixels.append((pxl_i, pxl_j))
-                    if probs[1][pxl_i][pxl_j] > probs[0][pxl_i][pxl_j]:
-                        bbox['score'] += probs[1][pxl_i][pxl_j]
-                        count += 1
-
-                    bbox['i_min'] = min(bbox['i_min'], pxl_i)
-                    bbox['j_min'] = min(bbox['j_min'], pxl_j)
-                    bbox['i_max'] = max(bbox['i_max'], pxl_i)
-                    bbox['j_max'] = max(bbox['j_max'], pxl_j)
-
-                    i_min = max(0, pxl_i - lookup_range)
-                    j_min = max(0, pxl_j - lookup_range)
-
-                    i_max = min(mask_img.shape[0], pxl_i + lookup_range + 1)
-                    j_max = min(mask_img.shape[1], pxl_j + lookup_range + 1)
-
-                    for i_k in range(i_min, i_max):
-                         for j_k in range(j_min, j_max):
-
-                            if mask_img[i_k, j_k] == 1 and (i_k, j_k) not in visited_pixels and (\
-                            i_k, j_k) not in pixels_to_visit:
-                                pixels_to_visit.append((i_k, j_k))
-                                visited_pixels.append((i_k, j_k))
-
-                    if not pixels_to_visit:
-                        break
-
-                    else:
-                        pixel = pixels_to_visit.pop()
-                        pxl_i = pixel[0]
-                        pxl_j = pixel[1]
-
-                bbox['score'] = float(bbox['score'])/count
-                bbox_list.append(bbox)
-
-    if verbose:
-        print("BBOX Found: %d" % bbox_found)
-
-    return bbox_list
-'''
-#lookup_range is maximum distance between same cluster pixels
-#bbox_coords = compute_bbox_coordinates(image, lookup_range=0, verbose=0)
-
-
-
+# Main rockHandler class
 class rockHandler(BaseHandler):
     """
     A custom model handler implementation
@@ -181,6 +114,7 @@ class rockHandler(BaseHandler):
             print(torch.cuda.device_count())
             print(torch.cuda.get_device_name(0))
 
+    # Preprocess a singular input image (normalize, convert to tensor)
     def preprocess_one(self, request):
         """
         Preprocess a single request
@@ -215,6 +149,7 @@ class rockHandler(BaseHandler):
 
         return [self.preprocess_one(req) for req in requests]
 
+    # Run the images through the network
     def inference(self, tensors):
         """
         Return a prediction
@@ -223,6 +158,7 @@ class rockHandler(BaseHandler):
         output = [self.model(x.permute(0,2,3,1))[0] for x in tensors]
         return output
 
+    # Postprocess a single network output (return the bounding box coordinates and score)
     def postprocess_one(self, output):
         """
         Filter low confidence detections, run NMS for single output
