@@ -1,3 +1,5 @@
+# Creates precision+recall graphs for input models
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -114,6 +116,7 @@ def load_model():
 
     return model
 
+# Get the precision and recall values for an input
 def calc_precision_recall(y_true, y_pred):
 
     TP = (y_pred&y_true).sum()
@@ -207,6 +210,7 @@ def run():
 
     setLen = len(datasets[setType])
 
+    # Empty lists to populate with corresponding precision and recall values
     lr = LogisticRegression(max_iter = 10000, penalty = 'none')
     pScoreLR = []
     rScoreLR = []
@@ -215,11 +219,13 @@ def run():
     pScoreL2 = []
     rScoreL2 = []
 
+    # Set of thresholds for the graph to run against
     probability_thresholds = np.linspace(0, 1, num = 100)
 
     P = 0
     tot = 0
 
+    # Run the model over all the probabilities in order to get the total precision and recall values
     for p in probability_thresholds:
         setItr = iter(loaders[setType])
         curP = 0
@@ -294,142 +300,6 @@ def run():
     print("LR (No reg.) AUC-PR:"+str(aucLR))
     print("LR (L2 reg.) AUC-PR:"+str(aucL2))
     return
-
-'''
-
-    samBox = 0
-    rohBox = 0
-
-    avgRSBox = 0
-
-    avgIoU = 0
-    avgDice = 0
-
-    avgAdjIoU = 0
-    avgAdjDice = 0
-
-    avgSIoU = 0
-    avgSDice = 0
-
-    avgPos = 0
-
-    #(c0, c1) = (0.7, 0.3)
-    #avgFalse = 0
-    #avgSFalse = 0
-
-    setLen = len(datasets[setType])
-
-    #Visualizing
-    for itr in range(setLen):
-        im, ind = next(iter(loaders[setType]))
-        im = im.permute(0,2,3,1)
-        out = model(im)[0]
-        prob = out.detach().cpu().numpy()[0,:,:,:] #Probability matrix
-        #print(a[0,:,:])
-        #print(a[1,:,:])
-        om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
-        om = (out.squeeze())[1].detach().cpu().numpy()
-        print(om)
-        print(om.shape)
-        #print(omi)
-        #print(omi.shape)
-
-        rohBase = (om >= thresh) #.astype(int) #0's as background, 1's as rocks
-        #print(rohBase)
-        #print(rohBase.shape)
-        #print(om == 1)
-        #print((om == 1).shape)
-        roh_bbox = compute_bbox_coordinates(rohBase, prob, lookup_range = 5, verbose = 0) #bbox
-
-        samBase = reverse_segmap(datasets[setType+'_label'][ind][0]) #0's as background, 1's as rocks
-        sam_bbox = compute_bbox_coordinates(samBase, prob, lookup_range = 5, verbose = 0) #bbox
-
-        rohBox += len(roh_bbox)
-        samBox += len(sam_bbox)
-
-        avgRSBox += len(roh_bbox)/len(sam_bbox)
-
-        TP = (rohBase&samBase).sum()
-        TN = ((1-rohBase)&(1-samBase)).sum()
-        FP = ((samBase^rohBase)&rohBase).sum()
-        FN = ((samBase^rohBase)&(1-rohBase)).sum()
-
-        IoU = TP/(TP+FP+FN)
-        Dice = (TP+TP)/(TP+TP+FP+FN)
-
-        adjIoU = TP/(TP+FN)
-        adjDice = (TP+TP)/(TP+TP+FN)
-
-        avgIoU += IoU
-        avgDice += Dice
-
-        avgAdjIoU += adjIoU
-        avgAdjDice += adjDice
-
-        sIoU = 0
-        sDice = 0
-        #sFalse = 0
-
-        for box in sam_bbox:
-            sBox = samBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
-            rBox = rohBase[box['i_min']:box['i_max'], box['j_min']:box['j_max']]
-            miniTP = (rBox&sBox).sum()
-            miniTN = ((1-rBox)&(1-sBox)).sum()
-            miniFP = ((sBox^rBox)&rBox).sum()
-            miniFN = ((sBox^rBox)&(1-rBox)).sum()
-            sIoU +=  miniTP/(miniTP+miniFP+miniFN)
-            sDice += (miniTP+miniTP)/(miniTP+miniTP+miniFP+miniFN)
-            #sFalse += 1-((c0*miniFN+c1*miniFP)/(c0*miniFN+c1*miniFP+miniTN+miniTP))
-
-        avgSIoU += sIoU/len(sam_bbox)
-        avgSDice += sDice/len(sam_bbox)
-
-        pos = rohBase.sum()/samBase.sum()
-        avgPos += pos
-
-        #avgFalse += 1-((c0*FN+c1*FP)/(c0*FN+c1*FP+TN+TP))
-        #avgSFalse += sFalse/len(sam_bbox)
-
-
-        print('Image ' + str(itr+1) + '/' + str(setLen) + ' tested')
-
-    avgRSBox /= setLen
-    avgIoU /= setLen
-    avgDice /= setLen
-    avgAdjIoU /= setLen
-    avgAdjDice /= setLen
-    avgSIoU /= setLen
-    avgSDice /= setLen
-    avgPos /= setLen
-    #avgFalse /= setLen
-    #avgSFalse /= setLen
-
-    with open(ScoreTxtFile, "a") as f:
-        f.write("Model "+str(modelTest)+" results on "+setType+" set\n"+"Total Number of Rock Clusters:"+
-        "(Sam, Rohan) = ("+str(samBox)+", "+str(rohBox)+")\n"+"Average Number of Rock Clusters: (Sam, Rohan)"+
-        "= ("+str(samBox/setLen)+", "+str(rohBox/setLen)+")\n"+"Average Ratio Rohan:Sam Boxes = "+
-        str(avgRSBox)+"\n"+"Average IoU and Dice Scores: (IoU, Dice) = ("+str(avgIoU)+", "+str(avgDice)+
-        ")\n"+"Average Adjusted IoU and Dice Scores: (IoU, Dice) = ("+str(avgAdjIoU)+", "+str(avgAdjDice)+
-        ")\n"+"Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = ("+str(avgSIoU)+", "+
-        str(avgSDice)+")\n"+"Average Ratio Rohan:Sam Rock Pixels = "+str(avgPos)+"\n\n")
-        f.close()
-        #"Average False/Total Score = "+
-        #str(avgFalse)+"\n"+"Average False/Total Score over Sam's Boxes = "+str(avgSFalse)+"\n\n")
-        #f.close()
-
-    print("Model "+str(modelTest)+" results on "+setType+" set")
-    print("Total Number of Rock Clusters: (Sam, Rohan) = ("+str(samBox)+", "+str(rohBox)+")")
-    print("Average Number of Rock Clusters: (Sam, Rohan) = ("+str(samBox/setLen)+", "+str(rohBox/setLen)+")")
-    print("Average Ratio Rohan:Sam Boxes = "+str(avgRSBox))
-    print("Average IoU and Dice Scores: (IoU, Dice) = ("+str(avgIoU)+", "+str(avgDice)+")")
-    print("Average Adjusted IoU and Dice Scores: (IoU, Dice) = ("+str(avgAdjIoU)+", "+str(avgAdjDice)+")")
-    print("Average IoU and Dice Scores over Sam's Boxes: (IoU, Dice) = ("+str(avgSIoU)+", "+str(avgSDice)+")")
-    print("Average Ratio Rohan:Sam Rock Pixels = "+str(avgPos))
-    #print("Average False/Total Score = "+str(avgFalse))
-    #print("Average False/Total Score over Sam's Boxes = "+str(avgSFalse))
-'''
-
-    #return
 
 
 #----------------------
