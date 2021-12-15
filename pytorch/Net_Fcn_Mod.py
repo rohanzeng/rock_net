@@ -1,3 +1,4 @@
+# A modification of NET_FCN.py that combines the original file with densenet_cosine_264_k32.py for compactness when uploading to Hologram
 
 import scipy.misc as misc
 import torch
