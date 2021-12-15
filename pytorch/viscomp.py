@@ -1,4 +1,6 @@
 # Visualize the base image, base label, and network label output of a trained model on sets of training images
+# Also outputs a simple comparison of number of rock pixels, number of rocks found, and bounding box coordinates between the network output and labeled images
+# This file eventually was split up into just visualization.py and scoreCalc.py for the visualization and scoring/comparison respectively
 
 #----------------------
 # USER SPECIFIED DATA
