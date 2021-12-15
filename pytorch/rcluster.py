@@ -1,3 +1,5 @@
+# Trains a model on input cluster folders. Ensure that the number of clusters matches the total clusters in the corresponding folder
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -47,6 +49,8 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
+
+#Select which cluster groups to train on as well as the total number of clusters in the cluster folder
 clusters = [0,5,7,9]
 clus_dir = "../data/all_navcam/outputC"
 numClus = 18
