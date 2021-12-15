@@ -1,3 +1,5 @@
+# Test the classification network by running images through it and outputting their classified classes
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
