@@ -1,3 +1,5 @@
+# Minor modification of rmain.py to include a resize function in the RockDataSet class, but not quite used in the final network run
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
