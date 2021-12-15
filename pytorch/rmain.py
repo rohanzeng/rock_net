@@ -1,3 +1,5 @@
+# Main file for training a network based on the water classification network
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -28,6 +30,7 @@ from PIL import Image
 import preprocess as pp
 import Net_Fcn_Mod as nf
 
+# Main parameters
 num_classes = 2
 image_shape = (332, 514)
 num_epochs = 100
@@ -44,13 +47,23 @@ base_dir = "../data/all_navcam/output"
 label_dir = "../data/all_navcam/outputL"
 vgg_path = "../data/rvgg"
 
+# Select if Validation Set is run during training
 UseValidationSet = False
+
+# Select if base Training Set is run during training
 UseBaseSet = True
+
+# Select if augmented data is used to train the network after the base Training Set is run
 UseAugmentedSet = True
 TrainedModelWeightDir = "TrainedModelWeights/"
+
+# Select if starting from pretrained weights
 Trained_model_path = TrainedModelWeightDir+"7000.torch"
 TrainLossTxtFile = TrainedModelWeightDir + "TrainLossGPU.txt"
 ValidLossTxtFile = TrainedModelWeightDir + "ValidLossGPU.txt"
+
+# Keep this in for code functionality purposes, but used as base weights if no other pretrained weights are provided
+# Found in the water classification GitHub
 Pretrained_Encoder_Weights = "densenet_cosine_264_k32.pth"
 
 #Dataset Class: Gets items and returns the index for access by other datasets
@@ -70,6 +83,7 @@ class RockDataSet(Dataset):
         tensor_image = self.transform(image)
         return tensor_image, idx #, self.total_imgs[idx]
 
+# Calculates the IoU Loss metric
 class IoULoss(nn.Module):
     def __init__(self, weight=None, size_average=True):
         super(IoULoss, self).__init__()
@@ -93,6 +107,7 @@ class IoULoss(nn.Module):
 
         return 1-IoU
 
+# Calculates the Dice Loss Metric
 class DiceLoss(nn.Module):
     def __init__(self, weight = None, size_average = True):
         super(DiceLoss, self).__init__()
@@ -107,14 +122,18 @@ class DiceLoss(nn.Module):
 
         return 1-dice
 
+# Load the data
 def load_data():
     #Define transforms
     resize = transforms.Resize(256)
     crop = transforms.CenterCrop(224)
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
+    
+    # Normalize the input training images but not the labeled ones, convert all to tensors
     t_transform = transforms.Compose([transforms.ToTensor(), normalize])
     l_transform = transforms.Compose([transforms.ToTensor()])
 
+    # Training, Augmented Training, Validation, and Test Sets respectively along with their labels
     t_set = RockDataSet(base_dir + '/train/left_jpgs', t_transform)
     ta_set = RockDataSet(aug_dir + '/aug_train', t_transform)
     v_set = RockDataSet(base_dir + '/val/left_jpgs', t_transform)
@@ -124,36 +143,19 @@ def load_data():
     lv_set = RockDataSet(label_dir + '/val/labels_pngs', l_transform)
     lte_set = RockDataSet(label_dir + '/test/labels_pngs', l_transform)
 
-    #Set up loader for both train and validation sets
+    #Set up loader for both train and validation sets (to iterate through when training)
     t_loader = DataLoader(t_set, batch_size = batch_size, shuffle = True)
     ta_loader = DataLoader(ta_set, batch_size = batch_size, shuffle = True)
     v_loader = DataLoader(v_set, batch_size = batch_size, shuffle = False)
     te_loader = DataLoader(te_set, batch_size = batch_size, shuffle = True)
 
+    # Compile a dictionary of the sets and loaders
     datasets = {'train_label': lt_set, 'valid_label': lv_set, 'aug_label': lta_set, 'train': t_set, 'aug': ta_set, 'valid': v_set}
     loaders = {'train': t_loader, 'valid': v_loader, 'test': te_loader, 'aug': ta_loader}
 
     return datasets, loaders
 
 def load_model():
-    '''
-    model = models.vgg16(pretrained = True)
-    #print(model)
-
-    #Freeze model weights
-    for param in model.parameters():
-        param.requires_grad = False
-
-    model.classifier[6] = nn.Sequential(
-                          nn.Linear(4096, 256),
-                          nn.ReLU(),
-                          nn.Dropout(0.4),
-                          nn.Linear(256, num_classes),
-                          nn.LogSoftmax(dim=1))
-    '''
-    #print(model)
-    #if use_gpu:
-    #    model = model.to('cuda')
 
     model = nf.Net(NumClasses = num_classes, PreTrainedModelPath = Pretrained_Encoder_Weights, UseGPU = True,
             UpdateEncoderBatchNormStatistics = True)
@@ -172,16 +174,6 @@ def run():
     ###Load Data
     datasets, loaders = load_data()
 
-    #Test to save image
-    '''
-    im, lab = next(iter(t_loader))
-    plt.imshow(im[0,:,:,:].permute(1,2,0))
-    plt.savefig('im1.png')
-    plt.imshow(l_dataset[lab][0].permute(1,2,0))
-    plt.savefig('im1l.png')
-    #'''
-    #print(len(l_dataset)) 10310
-
     print("Train Data Loaded")
 
     ### Load Model and Parameters
@@ -195,7 +187,6 @@ def run():
     num = 10
     avgLoss = -1
     if UseBaseSet:
-        #Loss = DiceLoss()
         baseItr = iter(loaders['train'])
         for itr in range(len(datasets['train'])):
             im, ind = next(baseItr)
@@ -211,6 +202,9 @@ def run():
             #print(prob.size())
             #print(OneHotLabels.size())
             model.zero_grad()
+            
+            # You can select your loss function here if desired, by default it goes to Cross Entropy Loss
+            #Loss = DiceLoss()
             loss = -torch.mean((OneHotLabels * torch.log(prob + 0.0000001)))
 
             #loss = Loss(prob, OneHotLabels)
@@ -223,11 +217,13 @@ def run():
             loss.backward()
             optimizer.step()
 
+            # Save a training model
             if itr == len(datasets['train'])-1: # (itr-num) % 1000 == 0 and itr > num:
                 print("Saving Model to file in " + TrainedModelWeightDir)
                 torch.save(model.state_dict(), TrainedModelWeightDir + "/" + str(itr) + ".torch")
                 print("model saved")
 
+            # Output the current loss and average loss for the iteration
             if itr % 100 == 0:
                 torch.cuda.empty_cache()
                 print("Step "+str(itr)+"\n" +
@@ -237,7 +233,7 @@ def run():
                     f.write("\n"+str(itr)+"\t"+str(float(loss.data.cpu().numpy()))+"\t"+str(avgLoss))
                     f.close()
 
-            #Validation
+            # Validation, run the current network through the validation set and output the loss on the validation set
             if UseValidationSet and itr % 3000 == 0 and itr != 0:
                 SumLoss=np.float64(0.0)
                 NBatches = int(len(datasets['valid']))
@@ -256,7 +252,8 @@ def run():
                 with open(ValidLossTxtFile, "a") as f: #Write validation loss to file
                     f.write("\n" + str(itr) + "\t" + str(SumLoss))
                     f.close()
-
+    
+    # Same as base training except using augmented data, note that loss is defaulted to Cross Entropy Loss
     if UseAugmentedSet:
         if not UseBaseSet:
             itr = 0
