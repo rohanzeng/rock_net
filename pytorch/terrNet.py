@@ -1,3 +1,5 @@
+# Use a pretrained Pytorch Network to perform KMeans clustering to cluster images in a folder
+
 #Packages
 import numpy as np
 import matplotlib.pyplot as plt
@@ -86,6 +88,7 @@ for i in range(k):
     print("Class "+str(i)+": "+str(totClass[i])+" Images")
 '''
 
+# Preprocess the images
 with torch.no_grad():
     predictions = torch.zeros([totIm,1,1000])
     count = 0
