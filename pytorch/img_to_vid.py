@@ -1,3 +1,5 @@
+# Converts a set of images in a single folder into a single .avi video
+
 import cv2
 import os
 
