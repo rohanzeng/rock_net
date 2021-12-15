@@ -1,3 +1,5 @@
+# Calculate various score metrics relative to a trained model and evaluate
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -171,20 +173,28 @@ def run():
 
     print('Model Data Loaded')
 
+    # Sam's outputs are the labeled data, Rohan's outputs are the outputs from the network
+    
+    # Number of rocks each network has found
     samBox = 0
     rohBox = 0
 
+    # Average number of rocks
     avgRSBox = 0
 
+    # Average IoU and Dice Score
     avgIoU = 0
     avgDice = 0
 
+    # Average Adjusted IoU and Dice Score (not including False Positives since the network may label some pixels correctly that were incorrectly labeled in the training labels
     avgAdjIoU = 0
     avgAdjDice = 0
 
+    # Average IoU and Dice Score around the bounding boxes in Sam's outputs
     avgSIoU = 0
     avgSDice = 0
 
+    # Average positive pixels (rock pixels)
     avgPos = 0
 
     #(c0, c1) = (0.7, 0.3)
