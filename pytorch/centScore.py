@@ -1,3 +1,5 @@
+# Scores a model based on the centroids of the predicted rocks
+
 #----------------------
 # USER SPECIFIED DATA
 #----------------------
@@ -179,72 +181,7 @@ def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
         bbox = {'i_min': y, 'j_min': x, 'i_max': y+h, 'j_max': x+w, 'score': 0}
         bbox_list.append(bbox)
     return bbox_list
-'''
 
-def compute_bbox_coordinates(mask_img, probs, lookup_range, verbose = 0):
-
-    bbox_list = list()
-    visited_pixels = list()
-
-    bbox_found = 0
-
-    for i in range(mask_img.shape[0]):
-        for j in range(mask_img.shape[1]):
-
-            if mask_img[i,j] == 1 and (i, j) not in visited_pixels:
-
-                bbox_found += 1
-
-                pixels_to_visit = list()
-
-                count = 0
-
-                bbox = {'i_min': i, 'j_min': j, 'i_max' : i, 'j_max':j, 'score':0}
-
-                pxl_i = i
-                pxl_j = j
-
-                while True:
-                    visited_pixels.append((pxl_i, pxl_j))
-                    if probs[1][pxl_i][pxl_j] > probs[0][pxl_i][pxl_j]:
-                        bbox['score'] += probs[1][pxl_i][pxl_j]
-                        count += 1
-
-                    bbox['i_min'] = min(bbox['i_min'], pxl_i)
-                    bbox['j_min'] = min(bbox['j_min'], pxl_j)
-                    bbox['i_max'] = max(bbox['i_max'], pxl_i)
-                    bbox['j_max'] = max(bbox['j_max'], pxl_j)
-
-                    i_min = max(0, pxl_i - lookup_range)
-                    j_min = max(0, pxl_j - lookup_range)
-
-                    i_max = min(mask_img.shape[0], pxl_i + lookup_range + 1)
-                    j_max = min(mask_img.shape[1], pxl_j + lookup_range + 1)
-
-                    for i_k in range(i_min, i_max):
-                         for j_k in range(j_min, j_max):
-
-                            if mask_img[i_k, j_k] == 1 and (i_k, j_k) not in visited_pixels and (\
-                            i_k, j_k) not in pixels_to_visit:
-                                pixels_to_visit.append((i_k, j_k))
-                                visited_pixels.append((i_k, j_k))
-
-                    if not pixels_to_visit:
-                        break
-                    else:
-                        pixel = pixels_to_visit.pop()
-                        pxl_i = pixel[0]
-                        pxl_j = pixel[1]
-
-                bbox['score'] = float(bbox['score'])/count
-                bbox_list.append(bbox)
-
-    if verbose:
-        print("BBOX Found: %d" % bbox_found)
-
-    return bbox_list
-
-'''
 def compute_centroids(bbox_list):
     centList = []
     for bbox in bbox_list:
@@ -253,7 +190,8 @@ def compute_centroids(bbox_list):
         centList.append((xCen, yCen))
     return np.array(centList)
 
-#Sam's indices are the rows, mine are the columns
+# Sam's indices are the rows, mine are the columns
+# Creates an H Matrix to optimize in order to match corresponding centroids, based off of the Hungarian Algorithm
 def compute_HMatrix(centS, centR):
     size = max(len(centS), len(centR))
     dif = len(centS)-len(centR)
@@ -370,11 +308,12 @@ def run():
         centRList = compute_centroids(roh_bbox)
 
         #2D list of matched centroid indices (2xnum centroids)
+        #This was based off of the Hungarian Algorithm to find the cost matrix HMatrix
         HMatrix, centSList, centRList = compute_HMatrix(centSList, centRList)
         clusCent = sp.optimize.linear_sum_assignment(HMatrix)
 
-        #I thought that clusCent was ((a1,b1),(a2,c2)) when it's ((a1,a2,a3),(b1,b2,b3))
-        #Option 1: Centroid Distance
+        #I thought that clusCent was ((a1,b1),(a2,b2)) when it's ((a1,a2,a3),(b1,b2,b3))
+        #Option 1: Centroid Distance (If the matched centroids are within a certain distance of each other, add a point)
         base = len(centSList)
         dif = len(centSList)-len(centRList)
         disThresh = 150
@@ -422,7 +361,7 @@ def run():
         else:
             passDis += 1
 
-        #Option 2: Centroid Coverage
+        #Option 2: Centroid Coverage (If the predicted centroid lies in the space of the rock of the labeled centroid, add a point)
         base = len(centSList)
         dif = len(centSList)-len(centRList)
         covScore = 0
