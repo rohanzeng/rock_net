@@ -1,3 +1,6 @@
+# Train a classifier net based on the clusters made from KMeans for use in the final pipeline (Classify an image into a cluster then 
+# select the corresponding weights to perform semantic segmentation)
+
 from __future__ import print_function
 from __future__ import division
 import torch
