@@ -1,5 +1,3 @@
-# Manifest used for uploading to Hologram
-
 {
     "runtime": "python",
     "model": {
